@@ -1,0 +1,13 @@
+#!/bin/bash
+# Kills any running main.py bot process started from this project folder.
+
+APP_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+PIDS=$(pgrep -f "python3 main.py" 2>/dev/null)
+
+if [ -z "$PIDS" ]; then
+    osascript -e 'display notification "No running bot process found." with title "CookieRun Bot"'
+else
+    kill $PIDS
+    osascript -e 'display notification "Bot stopped." with title "CookieRun Bot"'
+fi

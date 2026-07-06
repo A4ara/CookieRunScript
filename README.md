@@ -93,16 +93,54 @@ Add, remove, or reorder states to match your actual game flow — e.g. if
 there's a "daily reward" popup only some of the time, you'll want an extra
 state or a branch for it.
 
-## 6. Run it
+## 6. Run it — double-click, no Terminal typing needed
+
+Two apps are included right in this folder:
+
+- **`CookieRunBot.app`** — double-click to start. It opens a Terminal
+  window automatically and runs the bot, and a small status window pops
+  up showing the bot's current state and last action.
+- **`CookieRunBot Stop.app`** — a backup way to force-stop the bot from
+  Finder if the other two stop methods below aren't available for some
+  reason.
+
+**Two ways to stop the bot once it's running:**
+- Press **Cmd+Shift+X** from anywhere — this works even while the game
+  or iPhone Mirroring window is focused, no need to switch apps. (Change
+  this combo via `STOP_HOTKEY` in `config.py` if it conflicts with
+  something else on your Mac.)
+- Click **Stop** in the small status window.
+
+The status window shows the current state (`shop`, `running`, `reward`,
+etc.) and the last action taken, updating live — more useful at a glance
+than scrolling Terminal text, though the Terminal window is still there
+if you want the detailed log.
+
+The first time you double-click `CookieRunBot.app`, macOS will likely
+block it as "from an unidentified developer." Right-click the app →
+**Open** → **Open** again in the dialog. You only need to do this once;
+after that it opens normally. The hotkey listener and status window also
+need Accessibility permission (same permission you already granted in
+step 2 covers this).
+
+These apps just launch `python3 main.py` under the hood using the
+dependencies you installed in step 2 — they don't bundle Python or
+OpenCV themselves, so step 2's `pip install`/`brew install` still needs
+to have been done once on this Mac first. But you'll never need to type
+that install command — or `python3 main.py` — again after that; from
+here on it's double-click to start, hotkey or Stop button to stop.
+
+(If you'd rather run it manually from Terminal instead, that still
+works — see the alternative instructions below.)
+
+## 7. (Alternative) Run it manually from Terminal
 
 ```bash
 python3 main.py
 ```
 
-Ctrl+C to stop. The bot also stops itself automatically if it sits on an
-unrecognized screen for too long (`UNKNOWN_SCREEN_TIMEOUT` in `config.py`)
-rather than clicking blindly — useful for catching login prompts, network
-errors, or unexpected popups.
+Ctrl+C to stop. Same underlying bot as the double-click apps — just
+without opening Terminal for you automatically.
 
 ## Tuning notes
 

@@ -1,0 +1,13 @@
+#!/bin/bash
+# Launcher for the CookieRunBot.app bundle.
+# Finds the project folder this app lives inside, then opens Terminal
+# and runs main.py there so you can see live output and stop with Ctrl+C.
+
+APP_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+
+osascript <<EOF
+tell application "Terminal"
+    activate
+    do script "cd '${APP_DIR}' && echo 'Starting CookieRun Bot...' && python3 main.py; echo; echo 'Bot stopped. You can close this window.'"
+end tell
+EOF

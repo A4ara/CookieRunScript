@@ -64,16 +64,32 @@ class MacroPlayer:
         with open(path) as f:
             return json.load(f)
 
-    def play(self, name: str, speed: float = 1.0):
-        """Replay a saved macro. speed > 1.0 plays faster, < 1.0 slower."""
+    def play(self, name: str, speed: float = 1.0, stop_event=None):
+        """Replay a saved macro. speed > 1.0 plays faster, < 1.0 slower.
+        If stop_event is given and gets set mid-playback, stops early
+        instead of finishing the whole recorded sequence."""
         events = self.load(name)
         last_t = 0.0
         for ev in events:
+            if stop_event is not None and stop_event.is_set():
+                print("Macro playback interrupted by stop signal.")
+                return
             wait = (ev["t"] - last_t) / speed
-            if wait > 0:
-                time.sleep(wait)
+            self._interruptible_sleep(wait, stop_event)
             self.controller.tap(ev["x"], ev["y"])
             last_t = ev["t"]
+
+    @staticmethod
+    def _interruptible_sleep(seconds: float, stop_event=None, chunk: float = 0.1):
+        """Sleep in small chunks so a stop signal lands within `chunk`
+        seconds instead of waiting out one long time.sleep() call."""
+        remaining = seconds
+        while remaining > 0:
+            if stop_event is not None and stop_event.is_set():
+                return
+            step = min(chunk, remaining)
+            time.sleep(step)
+            remaining -= step
 
 
 if __name__ == "__main__":

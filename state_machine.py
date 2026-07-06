@@ -31,12 +31,13 @@ class BotStateMachine:
         "reward_claim": {"action": "tap_optional",  "target": "claim_button", "next": "shop"},
     }
 
-    def __init__(self, matcher, controller, capture, start_state: str = "shop"):
+    def __init__(self, matcher, controller, capture, start_state: str = "shop", stop_event=None):
         self.matcher = matcher
         self.controller = controller
         self.capture = capture
         self.macro_player = MacroPlayer(controller)
         self.state = start_state
+        self.stop_event = stop_event
         self._unknown_since = None
         self._buy_attempts = 0
 
@@ -55,7 +56,7 @@ class BotStateMachine:
 
         if cfg["action"] == "macro":
             print(f"[{self.state}] Playing macro '{cfg['target']}'")
-            self.macro_player.play(cfg["target"])
+            self.macro_player.play(cfg["target"], stop_event=self.stop_event)
             self.state = cfg["next"]
             self._unknown_since = None
             return

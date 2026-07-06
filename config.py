@@ -28,3 +28,8 @@ UNKNOWN_SCREEN_TIMEOUT = 15
 # Random +/- pixel offset added to every tap so repeated taps aren't
 # pixel-identical every single time.
 JITTER_PIXELS = 3
+
+# Global hotkey to stop the bot instantly from anywhere (works even while
+# the game/iPhone Mirroring window has focus). Format uses pynput syntax:
+# <ctrl>, <shift>, <cmd>, <alt> as modifiers, plus a regular key.
+STOP_HOTKEY = "<cmd>+<shift>+x"
